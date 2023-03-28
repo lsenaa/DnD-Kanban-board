@@ -6,35 +6,32 @@ import _ from "lodash";
 
 const item = {
   id: uuidv4(),
-  name: "Clean the house",
+  name: "Todo 1",
 };
 
 const item2 = {
   id: uuidv4(),
-  name: "Wash the car",
+  name: "Todo 2",
 };
 
 function App() {
   const [text, setText] = useState("");
   const [state, setState] = useState({
     todo: {
-      title: "Todo",
+      title: "TODO",
       items: [item, item2],
     },
     "in-progress": {
-      title: "In Progress",
+      title: "DOING",
       items: [],
     },
     done: {
-      title: "Completed",
+      title: "DONE",
       items: [],
     },
   });
 
   const handleDragEnd = ({ destination, source }) => {
-    // console.log("from", source);
-    // console.log("to", destination);
-
     if (!destination) return;
 
     if (
@@ -63,7 +60,7 @@ function App() {
       return {
         ...prev,
         todo: {
-          title: "Todo",
+          title: "TODO",
           items: [
             {
               id: uuidv4(),
@@ -79,60 +76,67 @@ function App() {
 
   return (
     <div className="App">
-      <div>
+      <div className="todo-input">
         <input
+          className="input"
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
-        <button onClick={addItem}>Add</button>
+        <button className="button" onClick={addItem}>
+          Add
+        </button>
       </div>
-      <DragDropContext onDragEnd={handleDragEnd}>
-        {_.map(state, (data, key) => {
-          return (
-            <div className="column" key={key}>
-              <h3>{data.title}</h3>
-              <Droppable droppableId={key}>
-                {(provided, snapshot) => {
-                  return (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className="droppable-col"
-                    >
-                      {data.items.map((el, index) => {
-                        return (
-                          <Draggable
-                            key={el.id}
-                            index={index}
-                            draggableId={el.id}
-                          >
-                            {(provided, snapshot) => {
-                              return (
-                                <div
-                                  className={`item ${
-                                    snapshot.isDragging && "dragging"
-                                  }`}
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                >
-                                  {el.name}
-                                </div>
-                              );
-                            }}
-                          </Draggable>
-                        );
-                      })}
-                      {provided.placeholder}
-                    </div>
-                  );
-                }}
-              </Droppable>
-            </div>
-          );
-        })}
-      </DragDropContext>
+      <div className="todo-columns">
+        <DragDropContext onDragEnd={handleDragEnd}>
+          {_.map(state, (data, key) => {
+            return (
+              <div className="column" key={key}>
+                <h3>{data.title}</h3>
+                <Droppable droppableId={key}>
+                  {(provided, snapshot) => {
+                    return (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`droppable-col ${
+                          snapshot.isDraggingOver && "dragging"
+                        }`}
+                      >
+                        {data.items.map((el, index) => {
+                          return (
+                            <Draggable
+                              key={el.id}
+                              index={index}
+                              draggableId={el.id}
+                            >
+                              {(provided, snapshot) => {
+                                return (
+                                  <div
+                                    className={`item ${
+                                      snapshot.isDragging && "dragging"
+                                    }`}
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    {el.name}
+                                  </div>
+                                );
+                              }}
+                            </Draggable>
+                          );
+                        })}
+                        {provided.placeholder}
+                      </div>
+                    );
+                  }}
+                </Droppable>
+              </div>
+            );
+          })}
+        </DragDropContext>
+      </div>
     </div>
   );
 }
