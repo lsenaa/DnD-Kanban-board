@@ -6,12 +6,12 @@ import _ from "lodash";
 
 const item = {
   id: uuidv4(),
-  name: "Todo 1",
+  name: "Todo Title 1",
 };
 
 const item2 = {
   id: uuidv4(),
-  name: "Todo 2",
+  name: "Todo Title 2",
 };
 
 function App() {
