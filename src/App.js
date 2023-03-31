@@ -76,7 +76,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Todo - list</h1>
+      <h1 className="title">Make your Todo list!</h1>
       <div className="todo-input">
         <input
           className="input"
