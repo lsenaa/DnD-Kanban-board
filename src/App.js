@@ -80,7 +80,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1 className="title">Todo list</h1>
+      <h1 className="title">Manage your projects!</h1>
       <TodoInput
         todo={todo}
         setTodo={setTodo}
