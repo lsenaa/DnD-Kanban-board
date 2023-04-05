@@ -1,95 +1,76 @@
 import React, { useState } from "react";
 import "./App.css";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
-import _ from "lodash";
-
-const item = {
-  id: uuidv4(),
-  name: "Todo Title 1",
-};
-
-const item2 = {
-  id: uuidv4(),
-  name: "Todo Title 2",
-};
+import TodoInput from "./components/TodoInput";
+import TodoList from "./components/TodoList";
 
 function App() {
-  const [text, setText] = useState("");
-  const [state, setState] = useState({
-    todo: {
-      title: "TODO",
-      items: [item, item2],
-    },
-    "in-progress": {
-      title: "DOING",
-      items: [],
-    },
-    done: {
-      title: "DONE",
-      items: [],
-    },
-  });
+  const [todo, setTodo] = useState("");
+  const [todos, setTodos] = useState([]);
+  const [doingTodos, setDoingTodos] = useState([]);
+  const [CompletedTodos, setCompletedTodos] = useState([]);
 
-  const handleDragEnd = ({ destination, source }) => {
-    if (!destination) return;
+  const handleDragEnd = (result) => {
+    const { destination, source } = result;
+
+    console.log(result);
+
+    if (!destination) {
+      return;
+    }
 
     if (
-      destination.index === source.index &&
-      destination.droppableId === source.droppableId
-    )
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
       return;
+    }
 
-    const itemCopy = { ...state[source.droppableId].items[source.index] };
-    setState((prev) => {
-      prev = { ...prev };
-      prev[source.droppableId].items.splice(source.index, 1);
+    let add;
+    let active = todos;
+    let complete = CompletedTodos;
+    // Source Logic
+    if (source.droppableId === "TodosList") {
+      add = active[source.index];
+      active.splice(source.index, 1);
+    } else {
+      add = complete[source.index];
+      complete.splice(source.index, 1);
+    }
 
-      prev[destination.droppableId].items.splice(
-        destination.index,
-        0,
-        itemCopy
-      );
+    // Destination Logic
+    if (destination.droppableId === "TodosList") {
+      active.splice(destination.index, 0, add);
+    } else {
+      complete.splice(destination.index, 0, add);
+    }
 
-      return prev;
-    });
+    setCompletedTodos(complete);
+    setTodos(active);
   };
 
-  const addItem = () => {
-    setState((prev) => {
-      return {
-        ...prev,
-        todo: {
-          title: "TODO",
-          items: [
-            {
-              id: uuidv4(),
-              name: text,
-            },
-            ...prev.todo.items,
-          ],
-        },
-      };
-    });
-    setText("");
+  const addItem = (e) => {
+    e.preventDefault();
+    if (todo) {
+      setTodos([...todos, { id: uuidv4(), todo, isDone: false }]);
+      setTodo("");
+    }
   };
 
   return (
     <div className="App">
       <h1 className="title">Make your Todo list!</h1>
-      <div className="todo-input">
-        <input
-          className="input"
-          type="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
+      <TodoInput todo={todo} setTodo={setTodo} addItem={addItem} />
+      <DragDropContext onDragEnd={handleDragEnd}>
+        {/* <div className="todo-columns"> */}
+        <TodoList
+          todos={todos}
+          setTodos={setTodos}
+          CompletedTodos={CompletedTodos}
+          setCompletedTodos={setCompletedTodos}
         />
-        <button className="button" onClick={addItem}>
-          Add
-        </button>
-      </div>
-      <div className="todo-columns">
-        <DragDropContext onDragEnd={handleDragEnd}>
+        {/* <DragDropContext onDragEnd={handleDragEnd}>
           {_.map(state, (data, key) => {
             return (
               <div className="column" key={key}>
@@ -136,8 +117,9 @@ function App() {
               </div>
             );
           })}
-        </DragDropContext>
-      </div>
+        </DragDropContext> */}
+        {/* </div> */}
+      </DragDropContext>
     </div>
   );
 }
