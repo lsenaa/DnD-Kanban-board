@@ -6,7 +6,6 @@ const TodoInput = ({ todo, setTodo, addItem }) => {
       <input
         className="input"
         type="text"
-        placeholder="Enter a Task"
         value={todo}
         onChange={(e) => setTodo(e.target.value)}
       />

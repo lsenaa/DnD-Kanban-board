@@ -1,12 +1,20 @@
 import React from "react";
 import SingleTodo from "./SingleTodo";
 import { Droppable } from "react-beautiful-dnd";
-import "./styles.css";
+import "./Styles.css";
 
-const TodoList = ({ todos, setTodos, CompletedTodos, setCompletedTodos }) => {
+const TodoList = ({
+  todos,
+  setTodos,
+  doingTodos,
+  setDoingTodos,
+  completedTodos,
+  setCompletedTodos,
+}) => {
   return (
     <div className="todo-columns">
       <div className="column">
+        <h3>Todo</h3>
         <Droppable droppableId="TodosList">
           {(provided, snapshot) => (
             <div
@@ -16,7 +24,6 @@ const TodoList = ({ todos, setTodos, CompletedTodos, setCompletedTodos }) => {
               ref={provided.innerRef}
               {...provided.droppableProps}
             >
-              <span className="todos__heading">Todo</span>
               {todos?.map((todo, index) => (
                 <SingleTodo
                   index={index}
@@ -32,6 +39,7 @@ const TodoList = ({ todos, setTodos, CompletedTodos, setCompletedTodos }) => {
         </Droppable>
       </div>
       <div className="column">
+        <h3>In Progress</h3>
         <Droppable droppableId="InProgress">
           {(provided, snapshot) => (
             <div
@@ -41,14 +49,13 @@ const TodoList = ({ todos, setTodos, CompletedTodos, setCompletedTodos }) => {
               ref={provided.innerRef}
               {...provided.droppableProps}
             >
-              <span className="todos__heading">Todo</span>
-              {todos?.map((todo, index) => (
+              {doingTodos?.map((todo, index) => (
                 <SingleTodo
                   index={index}
-                  todos={todos}
+                  todos={doingTodos}
                   todo={todo}
                   key={todo.id}
-                  setTodos={setTodos}
+                  setTodos={setDoingTodos}
                 />
               ))}
               {provided.placeholder}
@@ -57,23 +64,20 @@ const TodoList = ({ todos, setTodos, CompletedTodos, setCompletedTodos }) => {
         </Droppable>
       </div>
       <div className="column">
+        <h3>Done</h3>
         <Droppable droppableId="TodosDone">
           {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              // className={`todos  ${
-              //   snapshot.isDraggingOver ? "dragcomplete" : "remove"
-              // }`}
               className={`droppable-col ${
                 snapshot.isDraggingOver && "dragging"
               }`}
             >
-              <span className="todos__heading">Done</span>
-              {CompletedTodos?.map((todo, index) => (
+              {completedTodos?.map((todo, index) => (
                 <SingleTodo
                   index={index}
-                  todos={CompletedTodos}
+                  todos={completedTodos}
                   todo={todo}
                   key={todo.id}
                   setTodos={setCompletedTodos}

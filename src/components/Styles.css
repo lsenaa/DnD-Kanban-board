@@ -47,12 +47,22 @@
 
 .item {
   margin-bottom: 10px;
+  min-height: 40px;
   background-color: white;
   padding: 20px 8px;
   border-radius: 10px;
   user-select: none;
+  position: relative;
 }
 
 .item.dragging {
   box-shadow: 5px 5px 5px gray;
+}
+
+.icon {
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 5px;
 }
