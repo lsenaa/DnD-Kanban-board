@@ -65,17 +65,28 @@ function App() {
     if (todo) {
       let newEntry = { id: uuidv4(), todo };
       setTodos([...todos, newEntry]);
-      // setTodos([...todos, { id: uuidv4(), todo, isDone: false }]);
+      // setTodos([...todos, { id: uuidv4(), todo }]);
       // localStorage.setItem("todos", JSON.stringify(todos));
       localStorage.setItem("todos", JSON.stringify([...todos, newEntry]));
       setTodo("");
     }
   };
 
+  const addEnter = (e) => {
+    if (e.key === "Enter") {
+      addItem();
+    }
+  };
+
   return (
     <div className="App">
       <h1 className="title">Todo list</h1>
-      <TodoInput todo={todo} setTodo={setTodo} addItem={addItem} />
+      <TodoInput
+        todo={todo}
+        setTodo={setTodo}
+        addItem={addItem}
+        addEnter={addEnter}
+      />
       <DragDropContext onDragEnd={handleDragEnd}>
         <TodoList
           todos={todos}

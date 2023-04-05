@@ -1,6 +1,6 @@
 import React from "react";
 
-const TodoInput = ({ todo, setTodo, addItem }) => {
+const TodoInput = ({ todo, setTodo, addItem, addEnter }) => {
   return (
     <div className="todo-input">
       <input
@@ -8,6 +8,7 @@ const TodoInput = ({ todo, setTodo, addItem }) => {
         type="text"
         value={todo}
         onChange={(e) => setTodo(e.target.value)}
+        onKeyDown={addEnter}
       />
       <button className="button" onClick={addItem}>
         Add
