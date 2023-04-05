@@ -4,7 +4,10 @@ import { Draggable } from "react-beautiful-dnd";
 
 const SingleTodo = ({ index, todo, todos, setTodos }) => {
   const deleteItem = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    const newTodos = todos.filter((todo) => todo.id !== id);
+
+    setTodos(newTodos);
+    localStorage.setItem("todos", JSON.stringify(newTodos));
   };
 
   return (

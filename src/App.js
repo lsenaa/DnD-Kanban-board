@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
@@ -11,10 +11,15 @@ function App() {
   const [doingTodos, setDoingTodos] = useState([]);
   const [completedTodos, setCompletedTodos] = useState([]);
 
+  useEffect(() => {
+    const localList = localStorage.getItem("todos");
+    if (localList) {
+      setTodos(JSON.parse(localList));
+    }
+  }, [setTodos]);
+
   const handleDragEnd = (result) => {
     const { destination, source } = result;
-
-    // console.log(result);
 
     if (!destination) {
       return;
@@ -58,7 +63,11 @@ function App() {
 
   const addItem = () => {
     if (todo) {
-      setTodos([...todos, { id: uuidv4(), todo, isDone: false }]);
+      let newEntry = { id: uuidv4(), todo };
+      setTodos([...todos, newEntry]);
+      // setTodos([...todos, { id: uuidv4(), todo, isDone: false }]);
+      // localStorage.setItem("todos", JSON.stringify(todos));
+      localStorage.setItem("todos", JSON.stringify([...todos, newEntry]));
       setTodo("");
     }
   };
