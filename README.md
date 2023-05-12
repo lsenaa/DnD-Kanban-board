@@ -4,7 +4,7 @@
 - 칸반 보드를 사용하여 할 일 추가 및 삭제, 진행 상황에 따른 구분이 가능합니다.
 
 ## 링크
-🔗 https://dnd-kanban-board.netlify.app/
+🔗 [DnD-Kanban-board](https://dnd-kanban-board.netlify.app/)
 
 ## 구현 화면
 ![MoveTodo](https://user-images.githubusercontent.com/114736992/230564508-f381cfbb-51c4-42d3-94f3-6ffadaaac508.gif)
