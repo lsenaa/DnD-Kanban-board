@@ -4,19 +4,29 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 import TodoInput from "./components/TodoInput";
 import TodoList from "./components/TodoList";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 function App() {
   const [todo, setTodo] = useState("");
-  const [todos, setTodos] = useState([]);
-  const [doingTodos, setDoingTodos] = useState([]);
-  const [completedTodos, setCompletedTodos] = useState([]);
+  const [todos, setTodos] = useLocalStorage("todos", []);
+  const [doingTodos, setDoingTodos] = useLocalStorage("doingTodos", []);
+  const [completedTodos, setCompletedTodos] = useLocalStorage(
+    "completedTodos",
+    []
+  );
 
   useEffect(() => {
-    const localList = localStorage.getItem("todos");
-    if (localList) {
-      setTodos(JSON.parse(localList));
+    // 이전에 저장된 로컬 스토리지가 없다면 초기값을 설정
+    if (!localStorage.getItem("todos")) {
+      setTodos([]);
     }
-  }, [setTodos]);
+    if (!localStorage.getItem("doingTodos")) {
+      setDoingTodos([]);
+    }
+    if (!localStorage.getItem("completedTodos")) {
+      setCompletedTodos([]);
+    }
+  }, [setTodos, setDoingTodos, setCompletedTodos]);
 
   const handleDragEnd = (result) => {
     const { destination, source } = result;
@@ -63,11 +73,8 @@ function App() {
 
   const addItem = () => {
     if (todo) {
-      let newEntry = { id: uuidv4(), todo };
+      const newEntry = { id: uuidv4(), todo };
       setTodos([...todos, newEntry]);
-      // setTodos([...todos, { id: uuidv4(), todo }]);
-      // localStorage.setItem("todos", JSON.stringify(todos));
-      localStorage.setItem("todos", JSON.stringify([...todos, newEntry]));
       setTodo("");
     }
   };
